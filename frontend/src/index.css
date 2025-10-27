@@ -1,1 +1,67 @@
 @import "tailwindcss";
+
+/* Custom Color Theme - Credit Jambo */
+:root {
+  --color-primary-green: #10b981;
+  --color-primary-green-dark: #059669;
+  --color-primary-blue: #3b82f6;
+  --color-primary-blue-dark: #2563eb;
+  --color-primary-orange: #f97316;
+  --color-primary-orange-dark: #ea580c;
+  --color-gradient-green-blue: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  --color-gradient-blue-orange: linear-gradient(135deg, #3b82f6 0%, #f97316 100%);
+  --color-gradient-green-orange: linear-gradient(135deg, #10b981 0%, #f97316 100%);
+}
+
+/* Smooth Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
