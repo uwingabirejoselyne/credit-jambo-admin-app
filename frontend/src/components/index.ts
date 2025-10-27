@@ -7,3 +7,4 @@ export { default as Badge } from './Badge';
 export { default as Table } from './Table';
 export { default as Spinner } from './Spinner';
 export { default as ToastProvider } from './ToastProvider';
+export { default as Layout } from './Layout';
