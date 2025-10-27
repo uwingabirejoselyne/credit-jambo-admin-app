@@ -3,6 +3,7 @@ import { useAuth } from './store/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Customers from './pages/Customers';
+import Transactions from './pages/Transactions';
 import Layout from './components/Layout';
 
 // Protected Route wrapper
@@ -44,6 +45,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Customers />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/transactions"
+        element={
+          <ProtectedRoute>
+            <Transactions />
           </ProtectedRoute>
         }
       />
