@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './store/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Customers from './pages/Customers';
 import Layout from './components/Layout';
 
 // Protected Route wrapper
@@ -35,6 +36,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/customers"
+        element={
+          <ProtectedRoute>
+            <Customers />
           </ProtectedRoute>
         }
       />
