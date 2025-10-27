@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Customers from './pages/Customers';
 import Transactions from './pages/Transactions';
+import DeviceVerification from './pages/DeviceVerification';
 import Layout from './components/Layout';
 
 // Protected Route wrapper
@@ -53,6 +54,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Transactions />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/device-verification"
+        element={
+          <ProtectedRoute>
+            <DeviceVerification />
           </ProtectedRoute>
         }
       />
