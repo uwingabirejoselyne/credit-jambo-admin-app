@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Table, Badge, Spinner, Input, Button } from '../components';
-import { transactionService, type Transaction } from '../services/transactionService';
+import { transactionService, type TransactionListItem } from '../services/transactionService';
 import showToast from '../utils/toast';
 
 const Transactions: React.FC = () => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<TransactionListItem[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<TransactionListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | 'deposit' | 'withdrawal'>('all');
@@ -72,22 +72,22 @@ const Transactions: React.FC = () => {
   const columns = [
     {
       header: 'Transaction ID',
-      accessor: (row: Transaction) => (
+      accessor: (row: TransactionListItem) => (
         <span className="font-mono text-sm text-gray-900">{row.id.substring(0, 8)}...</span>
       ),
     },
     {
       header: 'Customer',
-      accessor: (row: Transaction) => (
+      accessor: (row: TransactionListItem) => (
         <div>
           <p className="font-semibold text-gray-900">{row.userName || 'N/A'}</p>
-          <p className="text-xs text-gray-500">{row.userEmail || `ID: ${row.userId}`}</p>
+          <p className="text-xs text-gray-500">ID: {row.userId.substring(0, 8)}...</p>
         </div>
       ),
     },
     {
       header: 'Type',
-      accessor: (row: Transaction) => (
+      accessor: (row: TransactionListItem) => (
         <Badge
           variant={row.type === 'deposit' ? 'success' : 'warning'}
           icon={
@@ -108,27 +108,15 @@ const Transactions: React.FC = () => {
     },
     {
       header: 'Amount',
-      accessor: (row: Transaction) => (
+      accessor: (row: TransactionListItem) => (
         <span className={`font-bold ${row.type === 'deposit' ? 'text-green-600' : 'text-orange-600'}`}>
           {row.type === 'deposit' ? '+' : '-'} {row.amount.toLocaleString()} RWF
         </span>
       ),
     },
     {
-      header: 'Balance Before',
-      accessor: (row: Transaction) => (
-        <span className="text-gray-600">{row.balanceBefore.toLocaleString()} RWF</span>
-      ),
-    },
-    {
-      header: 'Balance After',
-      accessor: (row: Transaction) => (
-        <span className="font-semibold text-gray-900">{row.balanceAfter.toLocaleString()} RWF</span>
-      ),
-    },
-    {
       header: 'Status',
-      accessor: (row: Transaction) => (
+      accessor: (row: TransactionListItem) => (
         <Badge
           variant={
             row.status === 'completed'
@@ -146,7 +134,7 @@ const Transactions: React.FC = () => {
     },
     {
       header: 'Date & Time',
-      accessor: (row: Transaction) => (
+      accessor: (row: TransactionListItem) => (
         <span className="text-sm text-gray-600">{formatDate(row.createdAt)}</span>
       ),
     },

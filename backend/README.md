@@ -59,7 +59,7 @@ npm run build
 npm start
 ```
 
-The server will run on `http://localhost:5000` (or your configured PORT).
+The server will run on `http://localhost:5001` (or your configured PORT).
 
 ## Default Admin Credentials
 
@@ -95,7 +95,7 @@ backend/
 
 ### Base URL
 ```
-http://localhost:5000/api
+http://localhost:5001/api
 ```
 
 ### Authentication
@@ -361,7 +361,7 @@ npm test
 
 See `.env.example` for all available variables:
 
-- `PORT`: Server port (default: 5000)
+- `PORT`: Server port (default: 5001)
 - `NODE_ENV`: Environment (development/production)
 - `MONGODB_URI`: MongoDB connection string
 - `JWT_SECRET`: Secret for JWT signing

@@ -6,10 +6,6 @@ A modern, responsive admin dashboard for managing Credit Jambo's Savings Managem
 
 ### Modern UI/UX
 - **Responsive Design** - Works perfectly on desktop, tablet, and mobile
-- **3-Color Professional Theme** - Green (#10b981), Blue (#3b82f6), Orange (#f97316)
-- **Gradient Backgrounds** - Beautiful gradient cards and components
-- **Smooth Animations** - slideIn, fadeIn, and hover transitions
-- **Toast Notifications** - react-hot-toast for user feedback
 
 ### Pages
 
@@ -199,7 +195,7 @@ npm run preview
 Create a `.env` file in the frontend directory:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5001/api
 ```
 
 Currently using mock data. When ready to connect to real backend:
@@ -207,22 +203,6 @@ Currently using mock data. When ready to connect to real backend:
 2. Replace mock API calls in pages with real API calls
 3. The axios instance in `services/api.ts` is already configured
 
-## 🧪 Mock Data
-
-The application currently uses mock data from `services/mockData.ts`:
-- 5 mock customers
-- 5 mock transactions
-- 3 mock device verification requests
-- Dashboard statistics
-
-Mock API includes:
-- `mockApi.login()` - Authentication
-- `mockApi.getCustomers()` - Customer list
-- `mockApi.getTransactions()` - Transaction history
-- `mockApi.getDeviceRequests()` - Device verification requests
-- `mockApi.approveDevice()` - Approve device
-- `mockApi.rejectDevice()` - Reject device
-- `mockApi.getDashboardStats()` - Dashboard statistics
 
 ## 🔐 Authentication
 

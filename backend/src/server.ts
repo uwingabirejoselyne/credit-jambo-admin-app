@@ -3,9 +3,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
 import { env, validateEnv } from './config/env';
 import { connectDatabase } from './config/database';
 import routes from './routes';
+import specs from './config/swagger';
 import authService from './services/auth.service';
 
 // Create Express app
@@ -53,6 +55,9 @@ if (env.NODE_ENV === 'development') {
 /**
  * Routes
  */
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 // Health check
 app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({
