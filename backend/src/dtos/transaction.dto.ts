@@ -19,7 +19,7 @@ export class TransactionDTO {
   updatedAt: string;
 
   constructor(transaction: ITransaction & { user?: any }) {
-    this.id = transaction._id.toString();
+    this.id = (transaction._id as any).toString();
     this.userId = transaction.user._id?.toString() || transaction.user.toString();
 
     // Include user details if populated
@@ -53,7 +53,7 @@ export class TransactionListDTO {
   createdAt: string;
 
   constructor(transaction: ITransaction & { user?: any }) {
-    this.id = transaction._id.toString();
+    this.id = (transaction._id as any).toString();
     this.userId = transaction.user._id?.toString() || transaction.user.toString();
     this.userName = transaction.user.fullName || 'Unknown';
     this.type = transaction.type;

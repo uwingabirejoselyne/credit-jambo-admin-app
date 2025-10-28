@@ -1,4 +1,4 @@
-import { User, DeviceStatus } from '../models';
+import { User } from '../models';
 import { UserDTO, UserListDTO } from '../dtos';
 
 /**
@@ -15,9 +15,10 @@ export class CustomerService {
     const query: any = {};
     if (search) {
       query.$or = [
-        { fullName: { $regex: search, $options: 'i' } },
+        { firstName: { $regex: search, $options: 'i' } },
+        { lastName: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } },
-        { phoneNumber: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -60,25 +61,27 @@ export class CustomerService {
    */
   async getPendingVerifications() {
     const customers = await User.find({
-      'devices.status': DeviceStatus.PENDING,
+      'devices.isVerified': false,
     }).sort({ createdAt: -1 });
 
     return customers.map(customer => ({
-      id: customer._id.toString(),
-      fullName: customer.fullName,
+      id: (customer._id as any).toString(),
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      fullName: `${customer.firstName} ${customer.lastName}`,
       email: customer.email,
-      phoneNumber: customer.phoneNumber,
-      pendingDevices: customer.devices.filter(d => d.status === DeviceStatus.PENDING),
+      phone: customer.phone,
+      pendingDevices: customer.devices.filter(d => !d.isVerified),
       createdAt: customer.createdAt.toISOString(),
     }));
   }
 
   /**
-   * Verify customer device
+   * Verify customer device by deviceIdHash
    */
   async verifyDevice(
     customerId: string,
-    deviceId: string,
+    deviceIdHash: string,
     adminId: string
   ): Promise<UserDTO> {
     const customer = await User.findById(customerId);
@@ -87,18 +90,18 @@ export class CustomerService {
       throw new Error('Customer not found');
     }
 
-    const device = customer.devices.find(d => d.deviceId === deviceId);
+    const device = customer.devices.find(d => d.deviceIdHash === deviceIdHash);
 
     if (!device) {
       throw new Error('Device not found');
     }
 
-    if (device.status !== DeviceStatus.PENDING) {
-      throw new Error('Device is not pending verification');
+    if (device.isVerified) {
+      throw new Error('Device is already verified');
     }
 
-    // Update device status
-    device.status = DeviceStatus.VERIFIED;
+    // Update device verification
+    device.isVerified = true;
     device.verifiedBy = adminId as any;
     device.verifiedAt = new Date();
 
@@ -112,7 +115,7 @@ export class CustomerService {
    */
   async rejectDevice(
     customerId: string,
-    deviceId: string,
+    deviceIdHash: string,
     adminId: string,
     reason?: string
   ): Promise<UserDTO> {
@@ -122,21 +125,16 @@ export class CustomerService {
       throw new Error('Customer not found');
     }
 
-    const device = customer.devices.find(d => d.deviceId === deviceId);
+    const device = customer.devices.find(d => d.deviceIdHash === deviceIdHash);
 
     if (!device) {
       throw new Error('Device not found');
     }
 
-    if (device.status !== DeviceStatus.PENDING) {
-      throw new Error('Device is not pending verification');
-    }
-
-    // Update device status
-    device.status = DeviceStatus.REJECTED;
+    // Mark device as rejected (not verified) and record who rejected it
+    device.isVerified = false;
     device.verifiedBy = adminId as any;
     device.verifiedAt = new Date();
-    device.rejectionReason = reason || 'No reason provided';
 
     await customer.save();
 

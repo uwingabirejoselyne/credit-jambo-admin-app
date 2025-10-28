@@ -60,4 +60,5 @@ const AdminSchema = new Schema<IAdmin>(
  */
 AdminSchema.index({ email: 1 });
 
-export default mongoose.model<IAdmin>('Admin', AdminSchema);
+// Export with explicit collection name 'admins'
+export default mongoose.model<IAdmin>('Admin', AdminSchema, 'admins');

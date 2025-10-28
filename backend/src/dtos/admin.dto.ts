@@ -13,7 +13,7 @@ export class AdminDTO {
   createdAt: string;
 
   constructor(admin: IAdmin) {
-    this.id = admin._id.toString();
+    this.id = (admin.id as any).toString();
     this.email = admin.email;
     this.name = admin.name;
     this.role = admin.role;

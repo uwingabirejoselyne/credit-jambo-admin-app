@@ -36,7 +36,7 @@ export class AuthService {
 
     // Generate JWT token
     const token = generateToken({
-      id: admin._id.toString(),
+      id: admin.id.toString(),
       email: admin.email,
       role: admin.role,
     });

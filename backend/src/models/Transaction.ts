@@ -101,4 +101,5 @@ TransactionSchema.index({ status: 1 });
 TransactionSchema.index({ reference: 1 });
 TransactionSchema.index({ createdAt: -1 });
 
-export default mongoose.model<ITransaction>('Transaction', TransactionSchema);
+// Export with explicit collection name 'transactions' to match client app
+export default mongoose.model<ITransaction>('Transaction', TransactionSchema, 'transactions');

@@ -72,14 +72,14 @@ export class CustomerController {
       }
 
       const { id } = req.params;
-      const { deviceId } = req.body;
+      const { deviceIdHash } = req.body;
 
       if (!req.admin) {
         sendError(res, 'Not authenticated', 401);
         return;
       }
 
-      const customer = await customerService.verifyDevice(id, deviceId, req.admin.id);
+      const customer = await customerService.verifyDevice(id, deviceIdHash, req.admin.id);
 
       sendSuccess(res, customer, 'Device verified successfully');
     } catch (error: any) {
@@ -101,14 +101,14 @@ export class CustomerController {
       }
 
       const { id } = req.params;
-      const { deviceId, reason } = req.body;
+      const { deviceIdHash, reason } = req.body;
 
       if (!req.admin) {
         sendError(res, 'Not authenticated', 401);
         return;
       }
 
-      const customer = await customerService.rejectDevice(id, deviceId, req.admin.id, reason);
+      const customer = await customerService.rejectDevice(id, deviceIdHash, req.admin.id, reason);
 
       sendSuccess(res, customer, 'Device rejected successfully');
     } catch (error: any) {
@@ -139,12 +139,12 @@ export class CustomerController {
    */
   verifyDeviceValidation = [
     param('id').isMongoId().withMessage('Invalid customer ID'),
-    body('deviceId').notEmpty().withMessage('Device ID is required'),
+    body('deviceIdHash').notEmpty().withMessage('Device ID Hash is required'),
   ];
 
   rejectDeviceValidation = [
     param('id').isMongoId().withMessage('Invalid customer ID'),
-    body('deviceId').notEmpty().withMessage('Device ID is required'),
+    body('deviceIdHash').notEmpty().withMessage('Device ID Hash is required'),
     body('reason').optional().isString().withMessage('Reason must be a string'),
   ];
 }
