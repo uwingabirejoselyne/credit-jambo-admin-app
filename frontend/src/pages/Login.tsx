@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input } from '../components';
 import { useAuth } from '../store/AuthContext';
-import { mockApi } from '../services/mockData';
+import { authService } from '../services';
 import showToast from '../utils/toast';
 
 const Login: React.FC = () => {
@@ -48,15 +48,14 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await mockApi.login(email, password);
+      const response = await authService.login({ email, password });
 
-      if (response.success) {
-        login(response.data.admin, response.data.token);
-        showToast.success('Welcome back, ' + response.data.admin.name + '!');
-        navigate('/dashboard');
-      }
+      login(response.admin, response.token);
+      showToast.success('Welcome back, ' + response.admin.name + '!');
+      navigate('/dashboard');
     } catch (error: any) {
-      showToast.error(error.message || 'Login failed. Please try again.');
+      const errorMessage = error.response?.data?.message || error.message || 'Login failed. Please try again.';
+      showToast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -166,7 +165,7 @@ const Login: React.FC = () => {
               Email: admin@creditjambo.com
             </p>
             <p className="text-xs text-gray-600 font-mono">
-              Password: admin123
+              Password: Admin@123
             </p>
           </div>
         </div>

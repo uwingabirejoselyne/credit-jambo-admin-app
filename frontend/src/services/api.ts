@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// API Base URL - will be replaced with real backend URL later
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// API Base URL - Credit Jambo Admin Backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 // Create axios instance
 const api = axios.create({
