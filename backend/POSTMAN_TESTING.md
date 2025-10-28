@@ -236,14 +236,18 @@ Authorization: Bearer YOUR_TOKEN
   "data": [
     {
       "id": "67210a3c5f8e9a001234abcd",
+      "firstName": "John",
+      "lastName": "Doe",
       "fullName": "John Doe",
       "email": "john@example.com",
-      "phoneNumber": "+250788123456",
+      "phone": "+250788123456",
       "pendingDevices": [
         {
-          "deviceId": "device-123-abc",
-          "deviceName": "Samsung Galaxy S21",
-          "status": "pending"
+          "deviceId": "device-original-id",
+          "deviceIdHash": "a1b2c3d4e5f6...hashed",
+          "isVerified": false,
+          "createdAt": "2025-10-28T10:00:00.000Z",
+          "lastLoginAt": "2025-10-28T11:30:00.000Z"
         }
       ],
       "createdAt": "2025-10-28T10:00:00.000Z"
@@ -266,9 +270,11 @@ Content-Type: application/json
 ### Body (raw JSON)
 ```json
 {
-  "deviceId": "device-123-abc"
+  "deviceIdHash": "a1b2c3d4e5f6...hashed"
 }
 ```
+
+**Note:** Use the `deviceIdHash` from the pending verifications response, not the original `deviceId`.
 
 ### Expected Response
 ```json
@@ -277,14 +283,18 @@ Content-Type: application/json
   "message": "Device verified successfully",
   "data": {
     "id": "67210a3c5f8e9a001234abcd",
+    "firstName": "John",
+    "lastName": "Doe",
     "fullName": "John Doe",
     "email": "john@example.com",
+    "phone": "+250788123456",
     "devices": [
       {
-        "deviceId": "device-123-abc",
-        "deviceName": "Samsung Galaxy S21",
-        "status": "verified",
-        "verifiedAt": "2025-10-28T12:00:00.000Z"
+        "deviceId": "device-original-id",
+        "deviceIdHash": "a1b2c3d4e5f6...hashed",
+        "isVerified": true,
+        "verifiedAt": "2025-10-28T12:00:00.000Z",
+        "createdAt": "2025-10-28T10:00:00.000Z"
       }
     ]
   }
@@ -305,10 +315,12 @@ Content-Type: application/json
 ### Body (raw JSON)
 ```json
 {
-  "deviceId": "device-123-abc",
+  "deviceIdHash": "a1b2c3d4e5f6...hashed",
   "reason": "Suspicious device activity detected"
 }
 ```
+
+**Note:** Use the `deviceIdHash` from the pending verifications response.
 
 ### Expected Response
 ```json
@@ -317,13 +329,18 @@ Content-Type: application/json
   "message": "Device rejected successfully",
   "data": {
     "id": "67210a3c5f8e9a001234abcd",
+    "firstName": "John",
+    "lastName": "Doe",
     "fullName": "John Doe",
+    "email": "john@example.com",
+    "phone": "+250788123456",
     "devices": [
       {
-        "deviceId": "device-123-abc",
-        "status": "rejected",
-        "rejectionReason": "Suspicious device activity detected",
-        "verifiedAt": "2025-10-28T12:00:00.000Z"
+        "deviceId": "device-original-id",
+        "deviceIdHash": "a1b2c3d4e5f6...hashed",
+        "isVerified": false,
+        "verifiedAt": "2025-10-28T12:00:00.000Z",
+        "createdAt": "2025-10-28T10:00:00.000Z"
       }
     ]
   }

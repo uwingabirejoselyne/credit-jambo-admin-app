@@ -20,12 +20,20 @@ export class TransactionDTO {
 
   constructor(transaction: ITransaction & { user?: any }) {
     this.id = (transaction._id as any).toString();
-    this.userId = transaction.user._id?.toString() || transaction.user.toString();
 
-    // Include user details if populated
-    if (transaction.user.fullName) {
-      this.userName = transaction.user.fullName;
-      this.userEmail = transaction.user.email;
+    // Handle user field - can be ObjectId or populated object
+    if (transaction.user) {
+      if (typeof transaction.user === 'object' && transaction.user._id) {
+        // User is populated
+        this.userId = transaction.user._id.toString();
+        this.userName = `${transaction.user.firstName || ''} ${transaction.user.lastName || ''}`.trim();
+        this.userEmail = transaction.user.email;
+      } else {
+        // User is just an ObjectId
+        this.userId = transaction.user.toString();
+      }
+    } else {
+      this.userId = 'Unknown';
     }
 
     this.type = transaction.type;
@@ -54,8 +62,23 @@ export class TransactionListDTO {
 
   constructor(transaction: ITransaction & { user?: any }) {
     this.id = (transaction._id as any).toString();
-    this.userId = transaction.user._id?.toString() || transaction.user.toString();
-    this.userName = transaction.user.fullName || 'Unknown';
+
+    // Handle user field - can be ObjectId or populated object
+    if (transaction.user) {
+      if (typeof transaction.user === 'object' && transaction.user._id) {
+        // User is populated
+        this.userId = transaction.user._id.toString();
+        this.userName = `${transaction.user.firstName || ''} ${transaction.user.lastName || ''}`.trim() || 'Unknown';
+      } else {
+        // User is just an ObjectId
+        this.userId = transaction.user.toString();
+        this.userName = 'Unknown';
+      }
+    } else {
+      this.userId = 'Unknown';
+      this.userName = 'Unknown';
+    }
+
     this.type = transaction.type;
     this.amount = transaction.amount;
     this.status = transaction.status;

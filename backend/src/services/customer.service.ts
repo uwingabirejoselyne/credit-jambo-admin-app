@@ -71,7 +71,13 @@ export class CustomerService {
       fullName: `${customer.firstName} ${customer.lastName}`,
       email: customer.email,
       phone: customer.phone,
-      pendingDevices: customer.devices.filter(d => !d.isVerified),
+      pendingDevices: customer.devices.filter(d => !d.isVerified).map(device => ({
+        deviceId: device.deviceId,
+        deviceIdHash: device.deviceIdHash,
+        isVerified: device.isVerified,
+        createdAt: device.createdAt.toISOString(),
+        lastLoginAt: device.lastLoginAt?.toISOString(),
+      })),
       createdAt: customer.createdAt.toISOString(),
     }));
   }
