@@ -1,5 +1,5 @@
 import api from './api';
-import { PaginationData } from './customerService';
+import type { PaginationData } from './customerService';
 
 export interface Transaction {
   id: string;

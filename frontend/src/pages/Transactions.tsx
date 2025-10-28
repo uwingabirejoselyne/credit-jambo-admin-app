@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Table, Badge, Spinner, Input, Button } from '../components';
-import { mockApi, Transaction } from '../services/mockData';
+import { transactionService, type Transaction } from '../services/transactionService';
 import showToast from '../utils/toast';
 
 const Transactions: React.FC = () => {
@@ -20,9 +20,9 @@ const Transactions: React.FC = () => {
 
   const fetchTransactions = async () => {
     try {
-      const response = await mockApi.getTransactions();
-      setTransactions(response.data);
-      setFilteredTransactions(response.data);
+      const response = await transactionService.getAll({ limit: 1000 });
+      setTransactions(response.transactions);
+      setFilteredTransactions(response.transactions);
     } catch (error: any) {
       showToast.error('Failed to load transactions');
     } finally {
@@ -37,7 +37,8 @@ const Transactions: React.FC = () => {
     if (searchTerm) {
       filtered = filtered.filter(
         (transaction) =>
-          transaction.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (transaction.userName && transaction.userName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (transaction.userEmail && transaction.userEmail.toLowerCase().includes(searchTerm.toLowerCase())) ||
           transaction.id.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -72,15 +73,15 @@ const Transactions: React.FC = () => {
     {
       header: 'Transaction ID',
       accessor: (row: Transaction) => (
-        <span className="font-mono text-sm text-gray-900">{row.id}</span>
+        <span className="font-mono text-sm text-gray-900">{row.id.substring(0, 8)}...</span>
       ),
     },
     {
       header: 'Customer',
       accessor: (row: Transaction) => (
         <div>
-          <p className="font-semibold text-gray-900">{row.customerName}</p>
-          <p className="text-xs text-gray-500">ID: {row.customerId}</p>
+          <p className="font-semibold text-gray-900">{row.userName || 'N/A'}</p>
+          <p className="text-xs text-gray-500">{row.userEmail || `ID: ${row.userId}`}</p>
         </div>
       ),
     },
@@ -146,7 +147,7 @@ const Transactions: React.FC = () => {
     {
       header: 'Date & Time',
       accessor: (row: Transaction) => (
-        <span className="text-sm text-gray-600">{formatDate(row.timestamp)}</span>
+        <span className="text-sm text-gray-600">{formatDate(row.createdAt)}</span>
       ),
     },
   ];

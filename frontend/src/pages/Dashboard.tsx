@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Badge, Spinner } from '../components';
-import { mockApi, type DashboardStats } from '../services/mockData';
+import { dashboardService, type DashboardStats } from '../services/dashboardService';
 import showToast from '../utils/toast';
 
 const Dashboard: React.FC = () => {
@@ -14,8 +14,8 @@ const Dashboard: React.FC = () => {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await mockApi.getDashboardStats();
-      setStats(response.data);
+      const data = await dashboardService.getStats();
+      setStats(data);
     } catch (error: any) {
       showToast.error('Failed to load dashboard statistics');
     } finally {

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Table, Badge, Spinner, Input, Button } from '../components';
-import { mockApi, Customer } from '../services/mockData';
+import { customerService, type CustomerListItem } from '../services/customerService';
 import showToast from '../utils/toast';
 
 const Customers: React.FC = () => {
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<CustomerListItem[]>([]);
+  const [filteredCustomers, setFilteredCustomers] = useState<CustomerListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'suspended'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
   useEffect(() => {
     fetchCustomers();
@@ -20,9 +20,9 @@ const Customers: React.FC = () => {
 
   const fetchCustomers = async () => {
     try {
-      const response = await mockApi.getCustomers();
-      setCustomers(response.data);
-      setFilteredCustomers(response.data);
+      const response = await customerService.getAll(1, 1000); // Get all customers
+      setCustomers(response.customers);
+      setFilteredCustomers(response.customers);
     } catch (error: any) {
       showToast.error('Failed to load customers');
     } finally {
@@ -37,15 +37,17 @@ const Customers: React.FC = () => {
     if (searchTerm) {
       filtered = filtered.filter(
         (customer) =>
-          customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          customer.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
           customer.phone.includes(searchTerm)
       );
     }
 
     // Status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter((customer) => customer.status === statusFilter);
+    if (statusFilter === 'active') {
+      filtered = filtered.filter((customer) => customer.isActive);
+    } else if (statusFilter === 'inactive') {
+      filtered = filtered.filter((customer) => !customer.isActive);
     }
 
     setFilteredCustomers(filtered);
@@ -62,22 +64,22 @@ const Customers: React.FC = () => {
   const columns = [
     {
       header: 'Customer',
-      accessor: (row: Customer) => (
+      accessor: (row: CustomerListItem) => (
         <div>
-          <p className="font-semibold text-gray-900">{row.name}</p>
+          <p className="font-semibold text-gray-900">{row.fullName}</p>
           <p className="text-sm text-gray-600">{row.email}</p>
         </div>
       ),
     },
     {
       header: 'Phone',
-      accessor: (row: Customer) => (
+      accessor: (row: CustomerListItem) => (
         <span className="text-gray-900">{row.phone}</span>
       ),
     },
     {
       header: 'Balance',
-      accessor: (row: Customer) => (
+      accessor: (row: CustomerListItem) => (
         <span className="font-semibold text-gray-900">
           {row.balance.toLocaleString()} RWF
         </span>
@@ -85,32 +87,30 @@ const Customers: React.FC = () => {
     },
     {
       header: 'Status',
-      accessor: (row: Customer) => (
+      accessor: (row: CustomerListItem) => (
         <Badge
-          variant={
-            row.status === 'active'
-              ? 'success'
-              : row.status === 'inactive'
-              ? 'default'
-              : 'danger'
-          }
+          variant={row.isActive ? 'success' : 'default'}
           pill
         >
-          {row.status.charAt(0).toUpperCase() + row.status.slice(1)}
+          {row.isActive ? 'Active' : 'Inactive'}
         </Badge>
       ),
     },
     {
       header: 'Device',
-      accessor: (row: Customer) => (
+      accessor: (row: CustomerListItem) => (
         <div className="flex items-center gap-2">
-          {row.deviceVerified ? (
+          {row.hasVerifiedDevice ? (
             <Badge variant="verified" size="sm" pill>
               ✓ Verified
             </Badge>
-          ) : (
+          ) : row.pendingDevices > 0 ? (
             <Badge variant="pending" size="sm" pill>
-              Pending
+              {row.pendingDevices} Pending
+            </Badge>
+          ) : (
+            <Badge variant="default" size="sm" pill>
+              No Device
             </Badge>
           )}
         </div>
@@ -118,14 +118,8 @@ const Customers: React.FC = () => {
     },
     {
       header: 'Joined',
-      accessor: (row: Customer) => (
+      accessor: (row: CustomerListItem) => (
         <span className="text-sm text-gray-600">{formatDate(row.createdAt)}</span>
-      ),
-    },
-    {
-      header: 'Last Login',
-      accessor: (row: Customer) => (
-        <span className="text-sm text-gray-600">{formatDate(row.lastLogin)}</span>
       ),
     },
   ];
@@ -167,7 +161,7 @@ const Customers: React.FC = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Active</p>
               <p className="text-2xl font-bold text-gray-900">
-                {customers.filter((c) => c.status === 'active').length}
+                {customers.filter((c) => c.isActive).length}
               </p>
             </div>
             <div className="p-3 bg-green-100 rounded-lg">
@@ -197,9 +191,9 @@ const Customers: React.FC = () => {
         <Card padding="md" hover className="border-l-4 border-yellow-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Unverified Devices</p>
+              <p className="text-sm text-gray-600 mb-1">Pending Devices</p>
               <p className="text-2xl font-bold text-gray-900">
-                {customers.filter((c) => !c.deviceVerified).length}
+                {customers.reduce((sum, c) => sum + c.pendingDevices, 0)}
               </p>
             </div>
             <div className="p-3 bg-yellow-100 rounded-lg">
@@ -250,13 +244,6 @@ const Customers: React.FC = () => {
               onClick={() => setStatusFilter('inactive')}
             >
               Inactive
-            </Button>
-            <Button
-              variant={statusFilter === 'suspended' ? 'danger' : 'secondary'}
-              size="md"
-              onClick={() => setStatusFilter('suspended')}
-            >
-              Suspended
             </Button>
           </div>
         </div>
