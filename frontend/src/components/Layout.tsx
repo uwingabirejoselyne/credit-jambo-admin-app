@@ -74,11 +74,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="h-full w-64 bg-gradient-to-b from-green-600 via-blue-600 to-blue-700 shadow-xl">
+        <div className="h-full w-64 bg-green-600 shadow-xl">
           {/* Logo */}
           <div className="flex items-center gap-3 p-6 border-b border-white/20">
             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -96,7 +96,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive(item.path)
-                    ? 'bg-white text-blue-600 shadow-lg'
+                    ? 'bg-white text-green-500 shadow-lg'
                     : 'text-white hover:bg-white/10'
                 }`}
               >
@@ -155,7 +155,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <p className="text-sm font-medium text-gray-700">{admin?.name}</p>
                 <p className="text-xs text-gray-500 capitalize">{admin?.role.replace('_', ' ')}</p>
               </div>
-              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold">
                   {admin?.name.charAt(0).toUpperCase()}
                 </span>

@@ -66,7 +66,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md animate-slideIn">
         {/* Logo/Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-blue-600 rounded-2xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-600 rounded-2xl mb-4 shadow-lg">
             <svg
               className="w-12 h-12 text-white"
               fill="none"
@@ -147,7 +147,7 @@ const Login: React.FC = () => {
             {/* Submit Button */}
             <Button
               type="submit"
-              variant="gradient-green-blue"
+              variant="success"
               size="lg"
               fullWidth
               isLoading={isLoading}

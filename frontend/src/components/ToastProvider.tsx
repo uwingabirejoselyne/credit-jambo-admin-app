@@ -23,12 +23,12 @@ const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
           },
           success: {
             style: {
-              background: '#10b981',
+              background: 'rgba(20, 208, 102, 1)',
               color: '#fff',
             },
             iconTheme: {
               primary: '#fff',
-              secondary: '#10b981',
+              secondary: 'rgba(20, 208, 102, 1)',
             },
           },
           error: {
@@ -43,12 +43,12 @@ const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
           },
           loading: {
             style: {
-              background: '#3b82f6',
+              background: 'rgba(20, 208, 102, 1)',
               color: '#fff',
             },
             iconTheme: {
               primary: '#fff',
-              secondary: '#3b82f6',
+              secondary: 'rgba(20, 208, 102, 1)',
             },
           },
         }}
