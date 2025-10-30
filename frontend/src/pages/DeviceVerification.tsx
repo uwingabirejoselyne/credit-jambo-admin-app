@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Table, Badge, Spinner, Input, Button, Modal } from '../components';
-import { customerService, type PendingVerification, type Device } from '../services/customerService';
+import { customerService, type Device } from '../services/customerService';
 import showToast from '../utils/toast';
 
 interface DeviceRequest {
@@ -147,7 +147,7 @@ const DeviceVerification: React.FC = () => {
     },
     {
       header: 'Status',
-      accessor: (row: DeviceRequest) => (
+      accessor: (_row: DeviceRequest) => (
         <Badge variant="warning" pill>
           Pending
         </Badge>
