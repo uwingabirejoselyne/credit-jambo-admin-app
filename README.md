@@ -61,11 +61,4 @@ This project is a two-part application that provides administrative capabilities
    - Email: `admin@creditjambo.com`
    - Password: `admin123`
 
-## Credit Jambo Ltd
-
-**Location:** NM 233 St, Nyamagumba, Musanze – Rwanda
-**Contact:** +250 788 268 451
-**Email:** hello@creditjambo.com
-**Website:** www.creditjambo.com
-
 For detailed information about each component, see the individual README files in the `backend` and `frontend` directories.
