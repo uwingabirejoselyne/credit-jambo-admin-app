@@ -20,12 +20,7 @@ const app: Application = express();
 app.use(helmet());
 
 // CORS - Cross-Origin Resource Sharing
-app.use(
-  cors({
-    origin: env.FRONTEND_URL,
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -56,26 +51,26 @@ if (env.NODE_ENV === 'development') {
  * Routes
  */
 // Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Health check
-app.get('/api/health', (_req: Request, res: Response) => {
+app.get("/api/health", (_req: Request, res: Response) => {
   res.status(200).json({
     success: true,
-    message: 'Credit Jambo Admin API is running',
+    message: "Credit Jambo Admin API is running",
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,
   });
 });
 
 // API routes
-app.use('/api', routes);
+app.use("/api", routes);
 
 // 404 handler
-app.use('*', (_req: Request, res: Response) => {
+app.use("*", (_req: Request, res: Response) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found',
+    message: "Route not found",
   });
 });
 
@@ -83,15 +78,15 @@ app.use('*', (_req: Request, res: Response) => {
  * Error handling middleware
  */
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('Error:', err);
+  console.error("Error:", err);
 
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal server error';
+  const message = err.message || "Internal server error";
 
   res.status(statusCode).json({
     success: false,
     message,
-    ...(env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(env.NODE_ENV === "development" && { stack: err.stack }),
   });
 });
 
@@ -100,7 +95,7 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
  */
 const startServer = async () => {
   try {
-    console.log('🔧 Starting Credit Jambo Admin API...');
+    console.log("🔧 Starting Credit Jambo Admin API...");
 
     // Validate environment variables
     validateEnv();
@@ -112,37 +107,37 @@ const startServer = async () => {
     const defaultAdmin = await authService.createDefaultAdmin(
       env.ADMIN_EMAIL,
       env.ADMIN_PASSWORD,
-      'System Administrator'
+      "System Administrator"
     );
 
     if (defaultAdmin) {
-      console.log('👤 Default admin created successfully');
-      console.log(`   Email: ${env.ADMIN_EMAIL}`);
-      console.log(`   Password: ${env.ADMIN_PASSWORD}`);
-      console.log('   ⚠️  Please change the password after first login!');
+      console.log("Default admin created successfully");
+      console.log(`Email: ${env.ADMIN_EMAIL}`);
+      console.log(`Password: ${env.ADMIN_PASSWORD}`);
+      console.log("Please change the password after first login!");
     }
 
     // Start listening
     app.listen(env.PORT, () => {
-      console.log('');
-      console.log('✅ Server started successfully!');
-      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      console.log(`📍 Environment: ${env.NODE_ENV}`);
-      console.log(`🌐 Server: http://localhost:${env.PORT}`);
-      console.log(`❤️  Health: http://localhost:${env.PORT}/api/health`);
-      console.log(`🔐 Auth: http://localhost:${env.PORT}/api/auth/login`);
+      console.log("");
+      console.log("Server started successfully!");
+      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+      console.log(`Environment: ${env.NODE_ENV}`);
+      console.log(`Server: http://localhost:${env.PORT}`);
+      console.log(`Health: http://localhost:${env.PORT}/api/health`);
+      console.log(`Auth: http://localhost:${env.PORT}/api/auth/login`);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('');
     });
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error("Failed to start server:", error);
     process.exit(1);
   }
 };
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err: Error) => {
-  console.error('🔴 Unhandled Promise Rejection:', err);
+  console.error('Unhandled Promise Rejection:', err);
   process.exit(1);
 });
 
