@@ -9,6 +9,9 @@ export default defineConfig({
   server: {
     host: "::",
     port: 8080,
+    headers: {
+      "Content-Type": "text/javascript"
+    }
   },
   plugins: [react(), tailwindcss(), netlify()],
   resolve: {
