@@ -32,8 +32,13 @@ Admin backend API for Credit Jambo Savings Management System.
 - npm or yarn
 
 ### Installation
+1. **Clone the repository** (if not already done):
+   ```bash
+   git clone `https://github.com/uwingabirejoselyne/credit-jambo-admin-app`
+   cd credit-jambo-admin-app/backend
+   ```
 
-1. **Install dependencies**:
+2. **Install dependencies**:
 ```bash
 npm install
 ```
@@ -91,7 +96,10 @@ backend/
 └── package.json         # Dependencies
 ```
 
-## API Endpoints
+## API Documentation
+```
+http://localhost:5001/api-docs
+```
 
 ### Base URL
 ```

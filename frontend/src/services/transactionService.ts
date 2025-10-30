@@ -18,6 +18,7 @@ export interface Transaction {
 }
 
 export interface TransactionListItem {
+  userEmail: any;
   id: string;
   userId: string;
   userName: string;

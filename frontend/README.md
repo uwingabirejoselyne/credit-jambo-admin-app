@@ -139,8 +139,13 @@ frontend/
 - npm or yarn
 
 ### Installation
+1. **Clone the repository** (if not already done):
+   ```bash
+   git clone `https://github.com/uwingabirejoselyne/credit-jambo-admin-app`
+   cd credit-jambo-admin-app/frontend
+   ```
 
-1. **Install dependencies:**
+2. **Install dependencies:**
 ```bash
 npm install
 ```
