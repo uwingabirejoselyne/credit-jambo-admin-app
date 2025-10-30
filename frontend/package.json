@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@netlify/vite-plugin": "^2.7.8",
     "@tailwindcss/vite": "^4.1.16",
     "axios": "^1.12.2",
     "jsonwebtoken": "^9.0.2",
